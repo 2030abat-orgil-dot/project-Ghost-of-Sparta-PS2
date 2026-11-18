@@ -10,11 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ps2dev/ps2sdk:latest
+      image: ghcr.io/ps2dev/ps2dev:latest
 
     steps:
       - name: Get project
         uses: actions/checkout@v4
+
+      - name: Install make
+        run: apk add --no-cache make
 
       - name: Build PS2 game
         run: |
@@ -26,3 +29,4 @@ jobs:
         with:
           name: Project-GOS-PS2
           path: project-gos.elf
+
