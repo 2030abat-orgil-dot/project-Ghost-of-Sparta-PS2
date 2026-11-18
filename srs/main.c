@@ -4,25 +4,34 @@
 #include <gsKit.h>
 #include <dmaKit.h>
 
-GSGLOBAL *gsGlobal;
-
-int main(void)
+int main(int argc, char *argv[])
 {
+    GSGLOBAL *gsGlobal;
+
     gsGlobal = gsKit_init_global();
+
+    dmaKit_init(
+        D_CTRL_RELE_OFF,
+        D_CTRL_MFD_OFF,
+        D_CTRL_STS_UNSPEC,
+        D_CTRL_STD_OFF,
+        D_CTRL_RCYC_8,
+        1 << DMA_CHANNEL_GIF
+    );
+
+    dmaKit_chan_init(DMA_CHANNEL_GIF);
+
     gsKit_init_screen(gsGlobal);
 
-    gsKit_clear_screen(gsGlobal);
+    gsKit_clear(gsGlobal,
+        GS_SETREG_RGBAQ(10, 15, 35, 0x80, 0));
 
     while (1)
     {
+        gsKit_queue_exec(gsGlobal);
         gsKit_sync_flip(gsGlobal);
-        gsKit_clear_screen(gsGlobal);
-
-        gsKit_set_color(gsGlobal, GS_SET_RGBA(255, 255, 255, 255));
-        gsKit_font_print(gsGlobal, 200, 200, 1, "PROJECT GOS - PS2");
-
-        gsKit_flip(gsGlobal);
     }
 
     return 0;
 }
+
