@@ -1,0 +1,28 @@
+
+name: Project GOS PS2 Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ps2dev/ps2sdk:latest
+
+    steps:
+      - name: Get project
+        uses: actions/checkout@v4
+
+      - name: Build PS2 game
+        run: |
+          make clean
+          make
+
+      - name: Upload PS2 executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Project-GOS-PS2
+          path: project-gos.elf
